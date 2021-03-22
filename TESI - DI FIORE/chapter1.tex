@@ -1,0 +1,97 @@
+\chapter{Anomaly Detection in Industry 4.0}
+
+% introduzione al capitolo
+da completare\\
+Before a more detailed explanation of how collected data can automate and improve the performance of these activities, the next sections show an overview of the different types of maintenance and the concept of anomaly detection, in the context of data-driven approaches using artificial intelligence algorithms. 
+
+% titolo della section
+\section{Introduction}
+The term "Industry 4.0" was used for the first time at the Hannover Fair of Industrial Technologies, in 2011, and refers to the Fourth Industrial Revolution. According to one of the most common definition in literature, Industry 4.0 is a paradigm, a new and innovative way of implementing the industrial processes for the production of a good or a service, thanks to the introduction of the most modern information and communication technologies (ICT). \\ 
+The introduction of Cyber Physical Systems(CPS) and the Internet of Things (IoT) into core industrial processes allows to take a step forward to the computerization or automation, already introduced with the third industrial revolution. The impact of these new technologies is particularly evident in the manufacturing sector: a simple factory becomes smart with integration of different physical and digital systems, from the production sectors to marketing or logistics ones, through devices, called smart sensors (also Industrial Internet of Things, IIoT), that allow the creation of a machine-to-machine interaction without the interventions of operators \cite{1smartfactory}, enabling also the collection of a large amount of data like measurements of temperature, humidity, vibration speed or sound of an equipment for the improvement of monitoring automations and process configurations. This large amount of data can also be useful to assess the current health status of machines and to plan maintenance activities, that have the main goal of reducing the unexpected downtime and expensive costs due to failures occurrences. Moreover, this new paradigm helps the improving of new business models and allows to satisfy emerging demand of customization of products through an intelligent process control and management.\\
+
+\section{Maintenance approaches}
+Maintenance is the combination of all technical, administrative and managerial actions during the life cycle of an item (in our context a machine) intended to restore it to a state in which it can perform better what it is designed for \cite{4maintenanceTransformation}. It is clear that maintenance activities are not only the physical operations that are needed to repair a particular machine, but also all activities for the planning and the scheduling of such operations, together with cost analysis, thus playing an important role in ensuring the success of a manufacturing company due to the impact that has on productivity, quality and economic balance.\\
+In literature, several maintenance approaches or procedures can be found \cite{3SystematicLiteratureReviewML}. Three strategies are listed below, also summarized by the Figure \ref{maintenance_strategy_overview}:
+\begin{itemize}
+\item{\textit{Run-to-Failure (R2F)} or \textit{Corrective maintenance} consist in repairing an equipment when it stops working. This is the simplest strategy, but is also the less convenient because it is necessary to stop the production in order to repair or replace the components that create problems.}
+\item{\textit{Preventive Maintenance (PvM)} or \textit{Time-based Maintenance} is an approach that consists in the creation of a periodical activities plan with the goal of anticipating processes of repair or prevent equipment failures. It is more effective than R2F but it increase the operating costs because some times these corrective actions are unnecessary.}
+\item{\textit{Predictive Maintenance (PdM)} use some prediction tools to establish when maintenance is necessary. It is the most innovative one and it is based on continuous monitoring of machines status, allowing early detection of failures and avoiding unnecessary actions.}
+\end{itemize}
+
+\begin{figure}[ht]
+\includegraphics[scale=0.8]{TESI DI FIORE/img/maintenance_strategy_overview.png}
+\centering
+\caption{Overview of different maintenance strategies \cite{3SystematicLiteratureReviewML}}
+\label{maintenance_strategy_overview}
+\end{figure}
+
+Therefore, an optimal maintenance strategy should improve the equipment conditions for a better quality of final products, reduces equipment failure rates for minimize downtime in production, maximizes equipment lifetime and minimizes the total costs. According to this, the PdM is the most promising strategy and the one that is under the researcher's spotlight in the last few years. \\ 
+Citing the study realized by Thyago P. Carvalho et al. \cite{3SystematicLiteratureReviewML} and Weiting Zhang et al. \cite{2DataDrivenMaintenance}, the PdM methods are mainly divided into three main categories: 
+\begin{itemize}
+\item{\textit{Model-Based Predictive Maintenance} consists in the development of complex mathematical models that replicate the behaviour of an equipment and its degradation process.}
+\item{\textit{Knowledge-Based Predictive Maintenance} consists in the application of threshold-based rules built on some measurements taken from machines that generate alerts in case in which some of them crosses.}
+\item{\textit{Data-Based or Data-Driven Predictive Maintenance} makes the use of progresses reached in the fields of advanced analytic and artificial intelligence (AI) techniques to build machine learning (ML) or deep learning (DL) models that have the capability to predict when next failures will occur. }
+\end{itemize}
+In conclusion, it is good to clarify that behind the word "predictive" several meanings are hidden. In data-driven techniques the main goal is to train a ML or DL models on historical data which contains information about the degradation of a component or about normal or anomalous behaviour of an equipment, and then use this model to predict its remaining useful life (RUL) or to detect some anomalies and generate alerts. Obviously this category of PdM is boosted by the large amount of historical or real-time time-series data that sensors in smart factories collect, allowing ever better performances.
+
+\section{Anomaly Detection in PdM}
+Anomaly detection (or outlier detection) is a set of techniques with the aim to identify anomaly patterns in data that deviates from normal behaviour. For example, a machine like a pump or a steam turbine after a period of normal behaviour starts deteriorating due to regular use, generating some \textit{anomalies} and entering in a status that can be identified as anomalous. This state should not be considered as a total failure state (in such case the machine should be turned off) but as a warning state, indicating that some maintenance procedures are needed \cite{5AnomalyDetectionSurvey}.\\
+In last years, in the context of anomaly detection, different machine learning and deep learning techniques have been developed, almost always based on time-series, which represents historical or real-time measurements of different machines' parameters. In particular, models can be trained with data recorded in some interval of time and representing different physical measure, like bearings vibrations, temperature or power consumption of an engine, sounds of a pump or a slider in action and much more. Three different types of anomaly can be identified \cite{6AnomalyIoTTimeSeries}: 
+\begin{itemize}
+\item{\textit{Point anomaly}: the time-series returns in normal state in very short time period, so the anomaly is represented by only few observations;}
+\item{\textit{Contextual anomalies}: observation or sequences that deviates from expected patterns, but if taken in isolation they not exceed the range of expected values for that signal;}
+\item{\textit{Collective or Pattern Anomalies}: observations that are labeled as anomalous only if taken together.}
+\end{itemize}
+In the figure \ref{anomalies} can be found a graphical view of the different types of anomaly just described. 
+\begin{figure}[ht]
+\centering
+\begin{subfigure}
+    \centering
+    \includegraphics[scale=0.8]{TESI DI FIORE/img/anomaly_a.png}
+\end{subfigure}
+\begin{subfigure}
+    \centering
+    \includegraphics[scale=0.7]{TESI DI FIORE/img/anomaly_b.png}
+\end{subfigure}
+\begin{subfigure}
+    \centering
+    \includegraphics[scale=0.7]{TESI DI FIORE/img/anomaly_c.png}
+\end{subfigure}
+\caption{Point anomaly (a), contextual anomaly (b) and collective anomaly (c) \cite{6AnomalyIoTTimeSeries}.}
+\label{anomalies}
+\end{figure}
+
+\subsection{Anomaly detection challenges}
+As in other field of predictive maintenance using machine learning algorithms, also in anomaly detection there are some important elements that must be taken into consideration, because they influences the performances of the trained models.\\ An important element is the information context. In fact, the presence of a variety of sensors distributed around the environment of the monitored system gives the opportunity to include contextual information into the collected data, using them for improving the anomaly detection process performances. In particular, two types of contexts must be handled: spatial context and external context. When multiple sensors are deployed to monitor a system that moves in different environment conditions, such as a train, the contextual information can effect a lot the performances of an anomaly detector. For example some behaviours that are normal when a train is running on a flat ground can be anomalous when it is on climbing an incline. This problem could be resolved using an accelerometer that measures the angle with the ground and incorporate its observations during the training. Moreover, external context can be likewise effective when monitoring the internal temperature of an equipment, because in this case the knowledge of external temperature can effect the results of the detection in better. Obviously, taking in consideration the context, some drawbacks are present like the necessity to build a more complex and expensive monitoring system and a more difficulty in model training.\\
+Other important elements that must be taken in consideration into the development of an anomaly detector are the data dimensionality and measurements noise. Univariate data consists of observations taken by a single sensor, while multivariate data consists of a sequence of observations taken by multiple sensors. In the second case, observations are linked together by the timestamp and this can an advantage in situations in which some patterns could hidden between the relationships among the various physical measures monitored by sensors. In an IoT environment where a large number of low cost, resource constrained sensors are deployed, the data quality is often affected by significant noise, inconsistencies and missing or duplicated data. Where the sensors are powered by battery these challenges are often amplified as the available charge decreases, it is often possible to aggregate data from multiple similar sensors into a single observation to reduce the environmental noise.\\
+Stationarity is also another important element that needs to be treated: a stationary time-series is one where the mean, variance and autocorrelation does not vary with time. Unfortunately, in real world non-stationary time series are very frequent and this make more complex the training of AI models because statistical data stream distribution may vary over time and so is normal over a period of time could be anomalous in another (concept of seasonality).\\
+One last challenge that must be faced in anomaly detection is the prediction of the "unknown". The word "unknown" refers to undesirable (or anomalous) events of which there are not often enough data. The consequence of this is that machine learning models can not be trained using a classification approach, because only normal state monitored data of an equipment are available to build an anomaly detector \cite{7AnomalyDetectionUnsupervised}. In fact, for example, while it is possible to build a toy industrial machine in order to collect data of its normal and anomalous working states, on the other hand, in some situations, it is unthinkable, dangerous and expensive try to generate anomalous behaviors of a machinery used in real world, like an aircraft, a train engine, an industrial press, with the only goal of collecting data. Because is quite simple to collect large dataset associated to a particular machine's working state, in such situations, machine learning models must be trained in a unsupervised way, where the word unsupervised means that the models try to detect an events that have no examples in the data history used for training \cite{8AnomalyDetectionUnsupervised2}. At this point, a question that arises is: how a trained model could detect anomalous measurements and generate alerts? A possible approach is showed in Figure \ref{scoring_system_approach}. The figure shows that models could be trained to reconstruct the received input, that refers to a normal working state, and if the output results enough different from the input an alert will be triggered.
+
+\begin{figure}[ht]
+\includegraphics[scale=0.65]{TESI DI FIORE/img/UnsupervisedLearningAnomalyDetection.png}
+\centering
+\caption{Anomaly detection high level workflow \cite{7AnomalyDetectionUnsupervised}}
+\label{scoring_system_approach}
+\end{figure}
+
+\section{Unsupervised Anomaly Detection}
+The lack of adequate anomalous samples in training data leads to the development of machine learning and deep learning approaches that must be founded only on the training with normal observations. According to this, classification and pattern recognition are not suitable approaches for this task. Anomalies in sensor data can be defined as previously unseen patterns and the algorithm for anomaly detection should be able to detect known anomalies as well as generalize to new and unknown ones. To achieve this detection, we utilize a sliding-window approach (Figure \ref{anomaly_detection_with_sliding_window}). Since the model is trained on normal data which is a fixed-length sequence of preceding steps, once the model is well trained, it can achieve anomaly detection by comparing the predicted value at each timestep with the actual sequence, allowing also to perform a real-time detection and eventually alerts generation \cite{9UnsupervisedOnlineAnomalyDetectionMultivariate}.
+\begin{figure}[ht]
+\includegraphics[scale=1]{TESI DI FIORE/img/OnlineAnomalyDetection.png}
+\centering
+\caption{Online detection procedure with sliding window \cite{9UnsupervisedOnlineAnomalyDetectionMultivariate}}
+\label{anomaly_detection_with_sliding_window}
+\end{figure}
+Several approaches have been developed for unsupervised anomaly detection. R. Silipo et al \cite{8AnomalyDetectionUnsupervised2} describes two techniques: the first, named Control Chart, and the second based on Auto-Regressive (AR) models. In the first case, the boundaries for an anomaly-free functioning equipment are defined. This boundaries are usually centered on the average signal values recorded by sensors and bounded by twice the standard deviation in both directions. If the signal is wandering off this anomaly free area, an alarm should occur. The second approach is conceptually similar to the Control Chart and uses an anomaly-free time window to train an AR model. The boundaries for anomaly-free functioning are defined here on the prediction errors on the training set. To clarify, the model receives in input a time-series made by sensor observations and the next time-step value is then predicted by the model. Successively, according a threshold established using the training set, if the predicted value is enough different from the actual value, an alarm is fired off requiring further checkups. This second technique is also cited in the survey \cite{6AnomalyIoTTimeSeries}.\\
+Another important and suitable machine learning method for this task is autoencoder and for this reason it will be at the center of this discussion. 
+An autoencoder (Figure \ref{autoencoder_image}) is a specific type of a neural network, which is mainly designed to encode the input into a compressed and meaningful representation, and then decode it back such that the reconstructed input is similar as possible to the original one \cite{10Autoencoders}. \\
+\begin{figure}[ht]
+\includegraphics[scale=0.65]{TESI DI FIORE/img/Autoencoder.png}
+\centering
+\caption{An autoencoder example \cite{10Autoencoders}.}
+\label{autoencoder_image}
+\end{figure}\\
+Autoencoder is so an unsupervised technique because any label or class is needed for training phase, so it results a perfect approach for anomaly detection. In details, the encoder part is made of a series of layers with a decreasing number of nodes and ultimately reduces input data into a latent vector, that represents a reduced (encoded) version of the input and contains only valuable or essential information of it. The decoder, as the encoder, is made of different layers with an increasing number of nodes and receives in input the latent vector and must generate an output as much as possible similar to the input. The process is described in mathematical way as follow:
+\[argmin_{D,E} || X - D(E(X))|| \]
+Where X is the input data, E is an encoder network, and D is a decoder network. Using this formula is evident that the performance of an autoencoder is estimable using the reconstruction error: the difference between the input and the output in terms of mean absolute error (mse) or mean squared error (mse). In the context of anomaly detection in predictive maintenance, the autoencoder can be trained to reconstruct the normal observations and then, in detection phase, use the reconstruction error as an anomaly score: if it is under a threshold the observation in input can be classified as normal, otherwise as anomalous. As mentioned before, the threshold is found using the reconstruction error of training set samples.
+

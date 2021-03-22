@@ -1,0 +1,93 @@
+\documentclass[a4paper, 14pt, oneside]{extbook}
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage{geometry}
+\usepackage{courier}
+\usepackage{subfigure}
+\usepackage[bookmarks]{hyperref}
+\newgeometry{
+left=   1.5 in,
+bottom= 1.5 in,
+right=  1 in,
+top=    1 in
+}
+
+\usepackage{fancyhdr}
+
+% Grafica
+\usepackage{graphicx,pstricks}
+\usepackage{graphics}
+\graphicspath{{img/}}
+
+% Package usati per il frontespizio
+\usepackage{tikz}
+\usepackage{pgf-pie}
+\usepackage{pgfplots}
+\pgfplotsset{width=7cm,compat=1.8}
+\usetikzlibrary{patterns}
+
+
+%Algorithm
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\setlength\headheight{44.2pt}
+%Page Style
+\usepackage{setspace}
+%\setstretch{2.5} 
+\doublespace
+
+%\cfoot{\thepage}
+\lhead[]{}
+\rhead[]{\leftmark}
+
+\pagestyle{fancy}{
+\lhead{\includegraphics[scale=0.3]{img/logo/hlogo.png}}
+\rhead{\footnotesize{Titolo abbreviato come intestazione}}
+}
+
+%Other
+\usepackage{comment}
+\usepackage{amsmath}
+
+%Testo riempitivo
+\usepackage{lipsum}
+
+
+\begin{document}
+
+%\maketitle
+\input{0_frontespizio.tex}
+\frontmatter
+
+%\input{dedica.tex}
+
+\input{abstract.tex}
+
+{\setstretch{1.5}
+
+\tableofcontents
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
+
+}
+
+\mainmatter
+
+\include{chapter1}
+\include{chapter2}
+\include{chapter3}
+
+\include{conclusion}
+
+\bibliography{bibliography}
+
+\bibliographystyle{plain}
+
+\end{document}
