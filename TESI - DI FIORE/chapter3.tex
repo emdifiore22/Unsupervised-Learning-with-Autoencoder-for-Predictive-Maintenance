@@ -11,7 +11,7 @@ Before describing the proposed model in detail, let’s have a look to the imple
 \end{figure}
 
 \section{Model architecture}
-The proposed ASD system shown in Figures \ref{offline-asd-system} and \ref{online-asd-system} consists of two main phases: an offline phase, responsible of the training of an autoencoder model and an online operation phase to conduct the ASD in real time. It is good to say immediately that this architecture is valid for different implementations of the autoencoder component. In fact, the novelty brought by this work is a generalization of ID embedding idea, shown in Chapter 2 and implemented for DCASE 2020 task 2 Dataset, through the use of different kinds of autoencoders, in terms of how the encoder or the decoder layers are built.\\
+The proposed ASD system shown in Figures \ref{offline-asd-system} and \ref{online-asd-system} consists of two main phases: an offline phase, responsible of the training of an autoencoder model and an online operation phase to conduct the ASD in real time.\\
 In the next two subsections there are detailed descriptions of the two phases, with a focus on each block present in the pipelines.
 \subsection{Offline Training Phase}
 \begin{figure}[ht]
@@ -20,14 +20,14 @@ In the next two subsections there are detailed descriptions of the two phases, w
 \caption{Overview of offline training phase of the proposed ASD system.}
 \label{offline-asd-system}
 \end{figure}
-This part of the overall architecture is responsible of the autoencoder training. The training process must be done in offline manner with the use of a pre-collected normal audio clips which belong to the machine that is under observation. In addition to the dataset, different other components can be noticed analyzing the Figure \ref{offline-asd-system}: the Features Extraction block, the IDs Pre-Processing block, the Label Generation block and finally the ID Conditioned Autoencoder. The first three parts prepare the dataset for training process, which it is executed in the last one.
+This part of the overall architecture is responsible of the autoencoder training. The training process must be done in offline manner with the use of a pre-collected normal audio clips which belong to the machine that is under observation. In addition to the dataset, different other components can be noticed analyzing the Figure \ref{offline-asd-system}: the Audio Pre-Procesing block, the IDs Pre-Processing block, the Label Generation block and finally the ID Conditioned Autoencoder. The first three parts prepare the dataset for training process, which it is executed in the last one.
 \subsubsection{Dataset Structure}
 In addition to the audio clips, the dataset must provide the ID used to identify the particular kind of $M$, embedding it into clips' filename (with \textit{.wav} extension) or in a separated file (obviously maintaining a one-to-one correspondence with audio files). Definitely, the data should be structured in couples composed by audio clips plus a numerical identifier.
-\subsubsection{Offline Features Extraction}
-This part of the architecture is responsible of the transformation of audio clips, an operation that is needed to make them ready for the neural network learning process. There are two different components in this block and they are the Mel-Spectrogram Extractor and the Frame Generator:
+\subsubsection{Offline Audio Pre-Processing}
+This part of the architecture is responsible of the transformation of audio clips, an operation that is needed to make them ready for the neural network learning process. There are two different components in this block:
 \begin{itemize}
     \item {\textit{Mel-Spectrogram extractor} receives in input the audio clips and it produces in output the corresponding spectrograms in a log-mel-scale.}
-    \item {\textit{Frame generator} produces in output a segmentation in $n \times m$ overlapping frames of the received log-mel-spectrograms.  }
+    \item {\textit{Normalization \& Frame generator} executes the normalization on all spectrograms extracted for each machine ID string and then produces in output a segmentation in $n \times m$ overlapping frames of the received log-mel-spectrograms.  }
 \end{itemize}
 A little digression should be made about what these spectrograms are and how the first block calculate them. A signal is a variation in a certain quantity over time and for audio, this quantity is air pressure, sampled by microphones with a particular rate (in the order of kHz). The Fast Fourier Transform (FFT) is an algorithm that allows the decomposition of a signal into its individual frequencies and the frequency’s amplitude, converting it from the time domain into the frequency domain (the spectrum). The Short-Time Fourier Transform (STFT) allows the representation of the spectrum of these signals as they vary over time (the spectrogram). As audio signals' frequency content vary over time (non-periodic signals) STFT is applied. In particular, the STFT is a FFT computed on overlapping windowed segments of the signal (Figure \ref{sftf}).\\
 \begin{figure}[ht]
@@ -66,8 +66,8 @@ In conclusion, when the input spectrogram frames are associated to wrong IDs, th
 \caption{Overview of online operating phase of the proposed ASD system.}
 \label{online-asd-system}
 \end{figure}
-The architecture used for online operation phase is very similar to the part just described, except for few components. The first thing that must be noticed is that this part of the architecture is meant for an effective and an operative use on field, since the left part of the Figure \ref{online-asd-system} shows that there is not a dataset but there is the real time raw audio stream from microphones disposed around the machine $M$. As other elements have been already explored in previous sections, following  there is a description of Feature Extraction block and the Anomalous Sound Detection block. 
-\subsubsection{Online Feature Extraction}
+The architecture used for online operation phase is very similar to the part just described, except for few components. The first thing that must be noticed is that this part of the architecture is meant for an effective and an operative use on field, since the left part of the Figure \ref{online-asd-system} shows that there is not a dataset but there is the real time raw audio stream from microphones disposed around the machine $M$. As other elements have been already explored in previous sections, following  there is a description of Audio Pre-Processing block and the Anomalous Sound Detection block. 
+\subsubsection{Online Audio Pre-Processing}
 It is very similar to the one presented before, with exception of the sliding window component. Because of real-time anomaly detection, there are not audio files, but there is a continuous audio stream. The autoencoder model is implemented and trained to work with $T$ seconds audio clips. For this reason, the sliding window component takes in input the stream and samples the last $T$ seconds from it, every $h$ seconds. Next, the audio clip obtained passes into mel-spectrogram extractor and into the frame generator, already presented. 
 \subsubsection{Anomalous Sound Detection}
 This is the final block of the online architecture and the one that is responsible of the sound labeling as normal or anomalous. In this part three components are highlighted: the pre-trained autoencoder, the reconstruction error calculator and a threshold. The pre-trained autoencoder is the result of the operations made by the offline part of the architecture. The reconstruction error calculator takes in input the output of the autoencoder and its input in order to evaluate the difference between these two (as the loss calculation during the training phase). This operation is made for each frame of the spectrogram associated to the audio clip and then an average of recostruction errors is calculated for the comparison with the threshold. In fact, the threshold is used to establish if the average reconstruction error is high enough to classify clips as anomalous. It could be chosen using reconstruction errors of training samples.
@@ -83,11 +83,11 @@ Clearly, because of the architecture is compatible with different kinds of autoe
 \section{Implementation technologies}
 In this section, some implementation details about the proposed model are given. The model was implemented in Python 3. Used technologies and libraries are:
 \begin{itemize}
-    \item {Google Colab: Colab notebooks are Jupyter notebooks that run in the cloud and are highly integrated with Google Drive, making them easy to set up, access, and share;}
-    \item {Tensorflow: it is an end-to-end open source platform for Machine Learning;}
-    \item {Keras: it is an open source Deep Learning API written in Python3;}
-    \item {NumPy, used to work in an efficient way with arrays;}
-    \item {SciKit-Learn, a machine learning library, containing simple and efficient tools for predictive data analysis;}
-    \item {Librosa, a Python library for audio and music processing.}
+    \item {Google Colab\footnote{http://colab.research.google.com}: Colab notebooks are Jupyter notebooks that run in the cloud and are highly integrated with Google Drive, making them easy to set up, access, and share;}
+    \item {Tensorflow\footnote{https://www.tensorflow.org}: it is an end-to-end open source platform for Machine Learning;}
+    \item {Keras\footnote{https://keras.io}: it is an open source Deep Learning API written in Python3;}
+    \item {NumPy\footnote{https://numpy.org}, used to work in an efficient way with arrays;}
+    \item {SciKit-Learn\footnote{https://scikit-learn.org/stable/}, a machine learning library, containing simple and efficient tools for predictive data analysis;}
+    \item {Librosa\footnote{https://librosa.org}, a Python library for audio and music processing.}
 \end{itemize}
 
