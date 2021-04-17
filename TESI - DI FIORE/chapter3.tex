@@ -15,7 +15,7 @@ The proposed ASD system shown in Figures \ref{offline-asd-system} and \ref{onlin
 In the next two subsections there are detailed descriptions of the two phases, with a focus on each block present in the pipelines.
 \subsection{Offline Training Phase}
 \begin{figure}[ht]
-\includegraphics[scale=0.48]{TESI DI FIORE/img/offline-architecture.png}
+\includegraphics[scale=0.9]{TESI DI FIORE/img/offline-architecture.png}
 \centering
 \caption{Overview of offline training phase of the proposed ASD system.}
 \label{offline-asd-system}
@@ -39,7 +39,7 @@ A little digression should be made about what these spectrograms are and how the
 Spectrograms usually presents on the x-axis the time, on the y-axis the frequencies and the amplitude is indicated by colors. Log-mel-spectrograms are spectrograms in which the frequencies on y-axis are represented using the Mel-Scale (seen in the previous chapter) and the amplitudes are expressed in Decibel (dB). The most important parameters involved into this transformation process are the length of the window used for STFT ($n\_fft$), the length of the overlap between two successive windows ($hop\_length$) and the number of bins used for the transformation into the Mel scale ($n$).
 In the Figure \ref{features-extraction} a complete graphical view of what this block does is illustrated.
 \begin{figure}[ht]
-\includegraphics[scale=0.8]{TESI DI FIORE/img/FeatureExtraction.png}
+\includegraphics[scale=1]{TESI DI FIORE/img/FeatureExtraction.png}
 \centering
 \caption{Features extraction block}
 \label{features-extraction}
@@ -61,7 +61,7 @@ while if the label is \textit{not-match} the loss function must be calculated us
 In conclusion, when the input spectrogram frames are associated to wrong IDs, the autoencoder tries to reconstruct C (and so high reconstruction error).
 \subsection{Online Operation Phase}
 \begin{figure}[ht]
-\includegraphics[scale=0.45]{TESI DI FIORE/img/online-architecture.png}
+\includegraphics[scale=0.9]{TESI DI FIORE/img/online-architecture.png}
 \centering
 \caption{Overview of online operating phase of the proposed ASD system.}
 \label{online-asd-system}
