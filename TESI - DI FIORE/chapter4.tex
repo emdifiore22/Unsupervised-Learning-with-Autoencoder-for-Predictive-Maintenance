@@ -136,6 +136,7 @@ Slider &  &  &  &  &  &  \\
 \caption{Batch size (BS), learning rate (LR) and number of epochs (EP) chosen. These parameters are used to get final results of the experimental part of this text.}
 \label{hyperparam-tables}
 \end{table}
+Regarding the metrics used for reconstruction errors evaluation, Mean Squared Error (MSE) is chosen for all models.
 
 \section{Evaluation and Performance Metrics}
 The goal of this section is to explain how the performances of trained models are evaluated. First of all, in both cases the test sets are pre-processed in the same way seen for training sets. Regarding the metrics used for models evaluation during the experiments, the area under the receiver operating characteristic (ROC) curve (AUC) and the partial-AUC (pAUC) are considered. These metrics are the same metrics used for the competition ranking, when the challenge was still in progress. Remembering that the ROC curve shows the trend of the true positive rate (TPR) in function of the false positive rate (FPR) at the variation of a parameter (like the threshold used for binary classification tasks), the pAUC is calculated as the AUC over a low FPR range $[0,p]$. Following, there are the formulas reported by \cite{DCASE}:
