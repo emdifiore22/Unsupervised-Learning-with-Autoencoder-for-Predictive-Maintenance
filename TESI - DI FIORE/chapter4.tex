@@ -61,22 +61,23 @@ In Chapter 3, mel-spectrogram extractor and all pre-processing blocks have been 
 \centering
 \begin{tabular}{|c|c|c|c|c|} 
 \cline{2-5}
-\multicolumn{1}{c|}{} & \multicolumn{2}{c|}{\textbf{IDCCAE}} & \multicolumn{2}{c|}{\textbf{LSTM AE}} \\ 
+\multicolumn{1}{c|}{} & \multicolumn{2}{c|}{\textbf{IDCCAE}} & \multicolumn{2}{c|}{\textbf{IDC-LSTM-AE}} \\ 
 \hline
 \textbf{Machine} & \textbf{Num. Frames} & \textbf{Hop-Size} & \textbf{Num. Frames} & \textbf{Hop-Size} \\ 
 \hline
-Pump &  &  &  &  \\ 
+Pump & 15 & 20 & 12 & 25  \\ 
 \hline
-Fan &  &  &  &  \\ 
+Fan & 15 & 20 & 12 & 25  \\ 
 \hline
-Valve &  &  &  &  \\ 
+Valve & 15 & 20 & 16 & 18  \\ 
 \hline
-Slider &  &  &  &  \\
+Slider & 21 & 14 & 22 & 13  \\
 \hline
 \end{tabular}
 \caption{Frame generation details.}
 \label{frame-generation}
 \end{table}
+
 In particular, the column \textit{Num. Frames} report, for each machine, the number of frames extracted from each spectrogram, while \textit{Hop-Size} indicates the segmentation time-window shift to extract them. Regarding the normalization, a Z-Score is applied on spectrograms sets extracted for each ID of a particular type, before the frame generation. For both instances of the framework, frames placed in input to autoencoders for training have the size of 128x32. In conclusion, regarding the IDs Pre-processing, the ID strings used to identify each machine, regardless the type, are $00$, $02$, $04$ and $06$ and they are converted respectively to $[0,0,0,1]$, $[0,0,1,0]$, $[0,1,0,0]$ and $[1,0,0,0]$. For each type there are four machines, n which the model must detect eventual anomalies. Moreover, for \textit{match} and \textit{not-match} transformations an $\alpha=0.75$ is chosen.
 
 \section{Autoencoder Structure}
@@ -121,17 +122,17 @@ The Table \ref{hyperparam-tables} reports, for the experiments made, the best hy
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|} 
 \cline{2-7}
-\multicolumn{1}{c|}{} & \multicolumn{3}{c|}{\textbf{IDCCAE}} & \multicolumn{3}{c|}{\textbf{LSTM}} \\
+\multicolumn{1}{c|}{} & \multicolumn{3}{c|}{\textbf{IDCCAE}} & \multicolumn{3}{c|}{\textbf{IDC-LSTM-AE}} \\
 \hline
 \textbf{Machine} & \textbf{BS} & \textbf{EP} & \textbf{LR} & \textbf{BS} & \textbf{EP} & \textbf{LR} \\ 
 \hline
-Pump &  &  &  &  &  &  \\ 
+Pump & 256	& 100 & 0.0001 & 512 & 100 & 0.001  \\ 
 \hline
-Fan &  &  &  &  &  &  \\ 
+Fan & 512 & 100 & 0.0001 & 256 & 100 & 0.001  \\ 
 \hline
-Valve &  &  &  &  &  &  \\ 
+Valve & 64 & 100 & 0.0001 &	512 & 100 & 0.001  \\ 
 \hline
-Slider &  &  &  &  &  &  \\
+Slider & 12	& 100 & 0.0001 & 512 & 100 & 0.001  \\
 \hline
 \end{tabular}
 \caption{Batch size (BS), learning rate (LR) and number of epochs (EP) chosen. These parameters are used to get final results of the experimental part of this text.}
@@ -148,48 +149,60 @@ and $\{x^+_j\}^{N_+}_{j=1}$ are normal and anomalous test samples, respectively,
 are the number of normal and anomalous test samples, respectively. According to the above formulas, the anomaly scores of normal test samples are used as the threshold. The pAUC is defined because if an ASD system gives false alerts frequently, we cannot trust it. For these reasons, it is especially important to increase the TPR under low FPR conditions. In this task, we will use $p=0.1$. In conclusion, because the results produced with a GPU are generally non-deterministic, the averages and standard deviations are calculated from 10 independent trials (training and testing). The next section reports results tables.
 
 \section{Results}
-This section compares the results obtained from the training of the two models just described and the results published by DCASE authors. The IDCCAE architecture is compared with a similar version of the architecture without the ID conditioning mechanism \cite{15DeepDenseConvAE}. The IDC-LSTM-AE, in the same way, is evaluated using the results obtained by \cite{16LSTMDeepAutoencodersForASDtask}, in which a similar LSTM autoencoder without conditioning is trained. 
-Moreover, both the proposed architectures, are compared with the baseline results provided by the authors of the challenge and with the results obtained by the authors of \cite{18IDConditionedAutoEncoder}, which have trained an autoencoder with fully connected layers and with the conditioning mechanism.
+This section compares the results obtained from the training of the two models just described and the results published by DCASE authors, related to the solutions proposed by participants. The IDCCAE architecture is compared with a similar version of the architecture without the ID conditioning mechanism \cite{15DeepDenseConvAE}. The IDC-LSTM-AE, in the same way, is evaluated using the results obtained by \cite{16LSTMDeepAutoencodersForASDtask}, in which a similar LSTM autoencoder without conditioning is trained. 
+Table \ref{results} compares both the proposed architectures with the baseline model results provided by the authors of the challenge.
+Table \ref{results_papers_comparison} shows the results obtained by Convolutional AE and LSTM AE without conditioning networks, developed by \cite{15DeepDenseConvAE} and \cite{16LSTMDeepAutoencodersForASDtask}.
 
 \begin{table}[ht]
+\small
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|} 
+\begin{tabular}{|m{2.8cm}|m{1.2cm}|m{1.3cm}|m{1.2cm}|m{1.3cm}|m{1.2cm}|m{1.3cm}|m{1.2cm}|m{1.3cm}|} 
 \cline{2-9}
-\multicolumn{1}{c|}{} & \multicolumn{2}{c|}{\textbf{Pump}} & \multicolumn{2}{c|}{\textbf{Fan}} & \multicolumn{2}{c|}{\textbf{Slider}} & \multicolumn{2}{c|}{\textbf{Valve}} \\ 
+\multicolumn{1}{c|}{} & \multicolumn{4}{c|}{\textbf{Pump}} & \multicolumn{4}{c|}{\textbf{Fan}} \\ 
 \hline
-\textbf{Architecture} & AUC & pAUC & AUC & pAUC & AUC & pAUC & AUC & pAUC \\ 
+\multirow{2}{*}{\textbf{Model}} & \multicolumn{2}{c|}{AUC} & \multicolumn{2}{c|}{pAUC} & \multicolumn{2}{c|}{AUC} & \multicolumn{2}{c|}{pAUC} \\ 
+\cline{2-9}
+ & Mean & Std.Dev & Mean & Std.Dev & Mean & Std.Dev & Mean & Std.Dev \\ 
 \hline
-Baseline &  &  &  &  &  &  &  &  \\ 
+Baseline & 72.89\% & 0,70\%~ & 59.99\% & 0.77\% & 65.83\% & 0.53\% & 52.45\% & 0.21\% \\ 
 \hline
-IDCAE &  &  &  &  &  &  &  &  \\ 
+IDCCAE & 76.63\% & 1.87\% & 67.90\% & 1.87\% & 71.05\% & 0.72\% & 70.33\% & 0.55\% \\ 
 \hline
-IDCCAE &  &  &  &  &  &  &  &  \\ 
+IDC-LSTM-AE & 78.29\% & 2.21\% & 69.67\% & 2.44\% & 67.66\% & 2.29\% & 65.83\% & 1.12\% \\ 
 \hline
-LSTM &  &  &  &  &  &  &  &  \\
+\multicolumn{1}{c|}{} & \multicolumn{4}{c|}{\textbf{Slider}} & \multicolumn{4}{c|}{\textbf{Valve}} \\ 
+\hline
+\multirow{2}{*}{\textbf{Model}} & \multicolumn{2}{c|}{AUC} & \multicolumn{2}{c|}{pAUC} & \multicolumn{2}{c|}{AUC} & \multicolumn{2}{c|}{pAUC} \\ 
+\cline{2-9}
+ & Mean & Std.Dev & Mean & Std.Dev & Mean & Std.Dev & Mean & Std.Dev \\ 
+\hline
+Baseline & 84.76\% & 0.29\% & 66.53\% & 0,62\%~ & 66.28\% & 0.49\% & 50.98\% & 0,15\%~ \\ 
+\hline
+IDCCAE & 90.99\% & 4.30\% & 84.14\% & 6.46\% & 74.73\% & 5.00\% & 61.18\% & 5.07\% \\ 
+\hline
+IDC-LSTM-AE & 82.62\% & 1.90\% & 74.48\% & 2.64\% & 62.98\% & 2.99\% & 59.71\% & 1.53\% \\
 \hline
 \end{tabular}
-\caption{Average of AUC and pAUC for different architectures on 10 indipendent trials (training and testing).}
-\label{datasets-average-results}
+\caption{Mean and Std.Dev of AUC and pAUC for different architectures on 10 indipendent trials (training and testing).}
+\label{results}
 \end{table}
+
 \begin{table}[ht]
+\small
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|} 
 \cline{2-9}
 \multicolumn{1}{c|}{} & \multicolumn{2}{c|}{\textbf{Pump}} & \multicolumn{2}{c|}{\textbf{Fan}} & \multicolumn{2}{c|}{\textbf{Slider}} & \multicolumn{2}{c|}{\textbf{Valve}} \\ 
 \hline
-\textbf{Architecture} & AUC & pAUC & AUC & pAUC & AUC & pAUC & AUC & pAUC \\ 
+\textbf{Model} & AUC & pAUC & AUC & pAUC & AUC & pAUC & AUC & pAUC \\ 
 \hline
-Baseline &  &  &  &  &  &  &  &  \\ 
+CAE \cite{15DeepDenseConvAE} & 72.07\% & 60.96\% & 66.78\% & 52.63\% & 91.77\% & 76.20\% & 78.83\% & 53.10\% \\ 
 \hline
-IDCAE &  &  &  &  &  &  &  &  \\ 
-\hline
-IDCCAE &  &  &  &  &  &  &  &  \\ 
-\hline
-LSTM &  &  &  &  &  &  &  &  \\
+LSTM \cite{16LSTMDeepAutoencodersForASDtask} & 73.94\% & 61.01\% & 84.99\% & 67.47\% & 67.82\% & 51.07\% & 67.32\% & 52.05\% \\
 \hline
 \end{tabular}
-\caption{Standard deviations of AUC and pAUC for different architectures on 10 indipendent trials (training and testing).}
-\label{datasets-std-dev-results}
+\caption{Results reported by the authors of \cite{15DeepDenseConvAE} and \cite{16LSTMDeepAutoencodersForASDtask} regarding the under test machines.}
+\label{results_papers_comparison}
 \end{table}
 
 \section{Threshold definition}
