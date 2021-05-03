@@ -1,11 +1,11 @@
 \chapter{Experimental Evaluation}
-As mentioned previously, this is the chapter dedicated to an experimental evaluation of the proposed framework. Firstly, there is an explanation of how the experiments are made and structured, then there is a detailed description of the DCASE dataset, already mentioned in Chapter 2, on which the proposed framework is evaluated. Successively, the chapter shows how data are prepared in order to obtain a proper output from the architecture, with a spotlight on chosen parameters.\\
+As previously mentioned, this chapter is dedicated to an experimental evaluation of the proposed framework. Firstly, an explanation of how the experiments are conducted is presented, then there is a detailed description of the DCASE dataset, already mentioned in Chapter 2, on which the proposed framework is evaluated. Successively, the chapter shows how data are prepared in order to obtain a proper output from the architecture, with a spotlight on chosen parameters.
 In conclusion, performance metrics are described and experimental results are reported.
 \section{Experimental protocol}
-The experimental part of this thesis shows two instances of the proposed framework changing the way autoencoder is built and using the DCASE dataset for evaluation. In particular, two different autoencoders are taken in consideration: LSTM encoder-decoder architecture and convolutional autoencoder. The purpose of this part is in fact to show the ID conditioning effects as autoencoder layers varies, to demonstrate its compatibility with different encoding and decoding processes. Using the nature of their autoencoder, the overall architectures are so identified as ID Conditioned LSTM Autoencoder (IDC-LSTM-AE) and ID Conditioned Convolutional Autoencoder (IDCCAE). IDC-LSTM-AE and IDCCAE architectures are implemented and trained on four machines present in DCASE dataset (details reported in following sections).
+The experimental part of this thesis shows two instances of the proposed framework, each characterized by the way autoencoder is built and using the DCASE dataset for evaluation. In particular, two different autoencoders are taken in consideration: LSTM encoder-decoder and convolutional autoencoder. The purpose of this part is in fact to show the ID conditioning effects as autoencoder layers varies, to demonstrate its compatibility with different encoding and decoding processes. Using the nature of their autoencoder, the overall architectures are so identified as ID Conditioned LSTM Autoencoder (IDC-LSTM-AE) and ID Conditioned Convolutional Autoencoder (IDCCAE). IDC-LSTM-AE and IDCCAE architectures are implemented and trained on four machines present in DCASE dataset (details reported in following sections).
 \section{Dataset and recording procedure}
 Previously, in Chapter 2, a brief introduction of DCASE 2020 TASK 2 has been done to introduce some approaches found in literature about the anomaly detection. During the experiments, a part of this dataset is used, in particular the one belonging to MIMII dataset \cite{20MIMIIDataset}.
-This dataset contains audio clips recorded from four different machine types: pumps, valves, slide rails and fans. Table \ref{machine-descriptions} shows information about their operations and possible failures that could occur. Clips are recorded by a circular microphone array so that single-channel-based or multi-channel-based approaches can be evaluated.
+This dataset contains audio clips recorded from four different machine types: pumps, valves, slide rails and fans. For each machine type there are four different versions. Table \ref{machine-descriptions} shows information about machines operations and possible failures that could occur. Clips are recorded by a circular microphone array so that single-channel-based or multi-channel-based approaches can be evaluated.
 \begin{figure}[ht]
 \includegraphics[scale=0.8]{TESI DI FIORE/img/micarray.png}
 \centering
@@ -31,8 +31,8 @@ Valve & \begin{tabular}[c]{@{}c@{}}Open/close repeat with\\~different timing\end
 \caption{Machine descriptions with some anomalous conditions.}
 \label{machine-descriptions}
 \end{table}
-Figure \ref{micarray} depicts the recording setup with the direction and distance from each machine type (each machine sound was recorded in separate sessions). To simplify the task, DCASE authors used only the first channel of multi-channel recordings and the sampling rate of all signals has been downsampled to 16 kHz. Last important thing to be noticed is the presence of real factory environmental background noise mixed with the target machine sound.\\
-DCASE 2020 authors take this dataset and arrange it in order to create \textit{development}, \textit{additional training} and \textit{evaluation} datasets. The first one contains all the necessary for autoencoder training, such as a training set and a test set, while the last one contains test data without condition labels, used for competition participants submissions. The development dataset is the one used for experiments presented in next sections. Table \ref{training-test-sets-structure} reports the machines and the number of audio clips for each of them respectively found in training and test sets.\\
+Figure \ref{micarray} depicts the recording setup with the direction and distance from each machine type (each machine sound was recorded in separate sessions). To simplify the task, DCASE authors used only the first channel of multi-channel recordings and the sampling rate of all signals has been downsampled to 16 kHz. Last important thing to be noticed is the presence of real factory environmental background noise mixed with the target machines sounds.\\
+DCASE 2020 authors take this dataset and arrange it in order to create \textit{development}, \textit{additional training} and \textit{evaluation} datasets. The first one contains all the necessary for autoencoder training, such as a training set and a test set, while the last one contains test data without condition labels, used for competition submissions. The development dataset is the one used for experiments presented in next sections. Table \ref{training-test-sets-structure} reports machines and the number of audio clips found in training and test sets.\\
 
 \begin{table}[ht]
 \centering
@@ -51,7 +51,7 @@ SLIDER & 968 & 456 & 968 & 367 & 434 & 278 & 434 & 189 \\
 VALVE & 891 & 219 & 608 & 220 & 900 & 220 & 892 & 220 \\
 \hline
 \end{tabular}
-\caption{Training and test set structures.}
+\caption{Number of training and test samples.}
 \label{training-test-sets-structure}
 \end{table}
 In conclusion, for both instances, four models has been trained, one for each machine type, using training and test sets of all available IDs.
@@ -78,15 +78,15 @@ Slider & 21 & 14 & 22 & 13  \\
 \label{frame-generation}
 \end{table}
 
-In particular, the column \textit{Num. Frames} report, for each machine, the number of frames extracted from each spectrogram, while \textit{Hop-Size} indicates the segmentation time-window shift to extract them. Regarding the normalization, a Z-Score is applied on spectrograms sets extracted for each ID of a particular type, before the frame generation. For both instances of the framework, frames placed in input to autoencoders for training have the size of 128x32. In conclusion, regarding the IDs Pre-processing, the ID strings used to identify each machine, regardless the type, are $00$, $02$, $04$ and $06$ and they are converted respectively to $[0,0,0,1]$, $[0,0,1,0]$, $[0,1,0,0]$ and $[1,0,0,0]$. For each type there are four machines, n which the model must detect eventual anomalies. Moreover, for \textit{match} and \textit{not-match} transformations an $\alpha=0.75$ is chosen.
+In particular, the column \textit{Num. Frames} report, for each machine, the number of frames extracted from each spectrogram, while \textit{Hop-Size} indicates the segmentation time-window shift to extract them. Regarding the normalization, a Z-Score is applied on spectrograms sets extracted for each ID of a particular type, before the frame generation. For both instances of the framework, frames placed in input to autoencoders for training have the size of 128x32. In conclusion, regarding the IDs Pre-processing, the ID strings used to identify each machine, regardless the type, are $00$, $02$, $04$ and $06$ (as can be seen in Table \ref{training-test-sets-structure}) and they are converted respectively to $[0,0,0,1]$, $[0,0,1,0]$, $[0,1,0,0]$ and $[1,0,0,0]$. Definitely, four models per architecture type must be trained to detect eventual anomalies. Moreover, for \textit{match} and \textit{not-match} transformations an $\alpha=0.75$ is chosen, while the vector C is chosen equal to 5.
 
 \section{Autoencoder Structure}
-In this section, the structures of IDCCAE and IDC-LSTM-AE are described. In both instances, the conditioning is a sequence of mathematical operations, as seen in Chapter 3, in which encoder output and ID conditioning network outputs are involved.
+In this section, the structures of IDCCAE and IDC-LSTM-AE are described. In both instances, the conditioning is a sequence of mathematical operations, in which encoder output and ID conditioning network outputs are involved, as seen in Chapter 3.
 
 \begin{figure}[ht]
-\includegraphics[scale=0.8]{TESI DI FIORE/img/CONDITIONING.png}
+\includegraphics[scale=0.7]{TESI DI FIORE/img/CONDITIONING.png}
 \centering
-\caption{Conditioning operations}
+\caption{Conditioning operations. $n$ is the number of latent variables.}
 \label{conditioning}
 \end{figure}
 
@@ -101,9 +101,8 @@ The encoded ID is passed through a dense layer and an activation layer to produc
 \label{IDCCAE}
 \end{figure}
 
-The Figure \ref{IDCCAE} reports a detailed view of how encoder and decoder block are composed in the convolutional instance of the framework. The encoder network consists in a stack of five hidden layers with convolutional filters of 32, 64, 128, 256, and 512. In particular, as can be seen at the right part of the image, each component of the encoder is composed by a stack of different layers: a convolutional layer, followed by batch normalization and the ReLU activation function.\\
-The bottleneck consists of a layer with 40 convolutional filters, reducing the encoder feature maps to a 40-dimensional encoded representation of the input. Regarding the decoder network, first a fully-connected layer reshapes its input to the shape of the last layer of the encoder and then five ConvTransposeBlock (Conv2DTranspose layers followed by batch normalization layers and ReLu activation functions) mirrors the encoder.\\
-The conditioning operations are those explained in previous sections.
+The Figure \ref{IDCCAE} reports a detailed view of how encoder and decoder block are composed in the convolutional instance of the framework. The encoder network consists in a stack of five hidden layers with convolutional filters of 32, 64, 128, 256, and 512. In particular, as can be seen at the right part of the image, each component of the encoder is a block composed by a stack of different layers: a convolutional layer, followed by batch normalization and the ReLU activation function.\\
+The bottleneck consists of a layer with 40 convolutional filters, reducing the encoder feature maps to a 40-dimensional encoded representation of the input. Regarding the decoder network, first a fully-connected layer reshapes its input to the shape of the last layer of the encoder and then five ConvTransposeBlock (Conv2DTranspose layers followed by batch normalization layers and ReLu activation functions) mirror the encoder. Conditioning operations are those explained in previous sections.
 
 \subsection{IDC-LSTM-AE}
 \begin{figure}[ht]
@@ -112,11 +111,11 @@ The conditioning operations are those explained in previous sections.
 \caption{ID Conditioned LSTM Autoencoder}
 \label{LSTM-AE}
 \end{figure}
-The Figure \ref{LSTM-AE} describes the architecture of the Long-Short Term Memory version of the autoencoder. Here, encoder is composed by three LSTM layers with a decreasing number of units (64,32 and 16) (which indicate the dimensionality of the output space). In this architecture, the 128x32 frames that are placed in input are seen as time-series of 32 timesteps, each of them characterized by 128 features, which are the frequency amplitudes (the $n\_mels$ bins). The decoder is the reversed version of the encoder, but at the beginning there is a RepeatVector layer, which repeats its input n times. In this case the input is repeated 32 times, such as the number of timesteps. This architecture tries to capture the temporal relationship between sequential frequency amplitudes through time, in order to learn a function which better reconstruct the inputs. In this case, encoder output is a 16-dimensional representation of its input. Also this time, the conditioning operations are those explained before.
+The Figure \ref{LSTM-AE} describes the architecture of the Long-Short Term Memory version of the autoencoder. Here, encoder is composed by three LSTM layers with a decreasing number of units (64,32 and 16), which indicate the dimensionality of their output space. In this architecture, the 128x32 frames placed in input are seen as time-series of 32 timesteps, each characterized by 128 features, which are the frequency amplitudes (the $n\_mels$ bins). The decoder is the reversed version of the encoder, but at the beginning there is a RepeatVector layer, which repeats its input n times. In this case the input is repeated 32 times, such as the number of timesteps. This architecture tries to capture the temporal relationship between sequential frequency amplitudes through time, in order to learn a better function to reconstruct the inputs. In this case, encoder output is a 16-dimensional representation of its input, while the conditioning operations are, again, those explained before.
 
 \section{Other Hyperparameters}
 In previous sections, autoencoders used to build the two instances of the proposed framework have been visualized, with an explanation of how layers are built. Obviously, during the training phase other parameters are involved, which should be optimized to get as high as possible performances. In the experimental phase of the study, in addition to those seen for IDCCAE and IDC-LSTM-AE, batch size, number of epochs and learning rate are autoencoder-independent hyperparameters taken in consideration during the tuning process. Regarding batch-size, the values $\{64,128,256,512\}$ have been attempted, while for the initial learning rate choice, values like $\{10^{-2}, 10^{-3}, 10^{-4}, 10^{-5}\}$ are used. Number of epochs has been varied between 50 and 200. Adam is used as optimizer for trainings.\\
-The Table \ref{hyperparam-tables} reports, for the experiments made, the best hyperparameters found.
+The Table \ref{hyperparam-tables} reports the best hyperparameters found during training process.
 
 \begin{table}[ht]
 \centering
@@ -141,12 +140,13 @@ Slider & 12	& 100 & 0.0001 & 512 & 100 & 0.001  \\
 Regarding the metrics used for reconstruction errors evaluation, Mean Squared Error (MSE) is chosen for all models.
 
 \section{Evaluation and Performance Metrics}
-The goal of this section is to explain how the performances of trained models are evaluated. First of all, in both cases the test sets are pre-processed in the same way seen for training sets. Regarding the metrics used for models evaluation during the experiments, the area under the receiver operating characteristic (ROC) curve (AUC) and the partial-AUC (pAUC) are considered. These metrics are the same metrics used for the competition ranking, when the challenge was still in progress. Remembering that the ROC curve shows the trend of the true positive rate (TPR) in function of the false positive rate (FPR) at the variation of a parameter (like the threshold used for binary classification tasks), the pAUC is calculated as the AUC over a low FPR range $[0,p]$. Following, there are the formulas reported by \cite{DCASE}:
+The goal of this section is to explain how the performances of trained models are evaluated. First of all, in both cases the test sets are pre-processed in the same way seen for training sets. Regarding the metrics used for models evaluation during the experiments, the area under the receiver operating characteristic (ROC) curve (AUC) and the partial-AUC (pAUC) are considered. These metrics are those used for the competition ranking, when the challenge was still in progress. Remembering that the ROC curve shows the trend of the true positive rate (TPR) in function of the false positive rate (FPR) at the variation of a parameter (like the threshold used for binary classification tasks), the pAUC is calculated as the AUC over a low FPR range $[0,p]$, with $p=0.1$. Formulas reported by \cite{DCASE} are:
 \[ AUC =\frac{1}{N_-N_+}\sum_{i=1}^{N_-}\sum_{j=1}^{N_+}\mathcal{H}(A_\theta(x_j^+)-A_\theta(x_i^-)) \]
 \[AUC =\frac{1}{ \left \lfloor pN_- \right \rfloor N_+}\sum_{i=1}^{ \left \lfloor pN_- \right \rfloor }\sum_{j=1}^{N_+}\mathcal{H}(A_\theta(x_j^+)-A_\theta(x_i^-))\]
 where $A_\theta(\cdot)$ is the anomaly score generated by the autoencoder, ⌊⋅⌋ is the flooring function and $\mathcal{H}$ returns 1 when $x>0$ and $0$ otherwise. Here, $\{x^−_i\}^{N_-}_{i=1}$
 and $\{x^+_j\}^{N_+}_{j=1}$ are normal and anomalous test samples, respectively, and have been sorted so that their anomaly scores are in descending order. Here, $N_−$ and $N_+$
-are the number of normal and anomalous test samples, respectively. According to the above formulas, the anomaly scores of normal test samples are used as the threshold. The pAUC is defined because if an ASD system gives false alerts frequently, we cannot trust it. For these reasons, it is especially important to increase the TPR under low FPR conditions. In this task, we will use $p=0.1$. In conclusion, because the results produced with a GPU are generally non-deterministic, the averages and standard deviations are calculated from 10 independent trials (training and testing). The next section reports results tables.
+are the number of normal and anomalous test samples, respectively. According to the above formulas, anomaly scores of normal test samples are used as the threshold. The anomaly score associated to a test sample is calculated taking the reconstruction errors average over all frames extracted from it and, after the application of normalization, placed in input. The pAUC is defined because it is especially important to increase the TPR under low FPR conditions, in that if an ASD system gives false alerts frequently we cannot trust it. \\
+In conclusion, because the results produced with a GPU are generally non-deterministic, means and standard deviations are calculated from 10 independent trials (training and testing of models). In particular, once trained, a model is evaluated on test sets, generating for each ID AUC and pAUC values. Moreover, mean values of AUC and pAUC are calculated from those obtained for each ID. Mean values are used to calculate mean and standard deviation of independent trials. The next section reports results tables.
 
 \section{Results}
 This section compares the results obtained from the training of the two models just described and the results published by DCASE authors, related to the solutions proposed by participants. The IDCCAE architecture is compared with a similar version of the architecture without the ID conditioning mechanism \cite{15DeepDenseConvAE}. The IDC-LSTM-AE, in the same way, is evaluated using the results obtained by \cite{16LSTMDeepAutoencodersForASDtask}, in which a similar LSTM autoencoder without conditioning is trained. 
@@ -166,9 +166,9 @@ Table \ref{results_papers_comparison} shows the results obtained by Convolutiona
 \hline
 Baseline & 72.89\% & 0,70\%~ & 59.99\% & 0.77\% & 65.83\% & 0.53\% & 52.45\% & 0.21\% \\ 
 \hline
-IDCCAE & 76.63\% & 1.87\% & 67.90\% & 1.87\% & 71.05\% & 0.72\% & 70.33\% & 0.55\% \\ 
+IDCCAE & \textbf{76.63\%} & 1.87\% & \textbf{67.90\%} & 1.87\% & \textbf{71.05\%} & 0.72\% & \textbf{70.33\%} & 0.55\% \\ 
 \hline
-IDC-LSTM-AE & 78.29\% & 2.21\% & 69.67\% & 2.44\% & 67.66\% & 2.29\% & 65.83\% & 1.12\% \\ 
+IDC-LSTM-AE & \textbf{78.29\%} & 2.21\% & \textbf{69.67\%} & 2.44\% & 67.66\% & 2.29\% & 65.83\% & 1.12\% \\ 
 \hline
 \multicolumn{1}{c|}{} & \multicolumn{4}{c|}{\textbf{Slider}} & \multicolumn{4}{c|}{\textbf{Valve}} \\ 
 \hline
@@ -178,12 +178,12 @@ IDC-LSTM-AE & 78.29\% & 2.21\% & 69.67\% & 2.44\% & 67.66\% & 2.29\% & 65.83\% &
 \hline
 Baseline & 84.76\% & 0.29\% & 66.53\% & 0,62\%~ & 66.28\% & 0.49\% & 50.98\% & 0,15\%~ \\ 
 \hline
-IDCCAE & 90.99\% & 4.30\% & 84.14\% & 6.46\% & 74.73\% & 5.00\% & 61.18\% & 5.07\% \\ 
+IDCCAE & 90.99\% & 4.30\% & \textbf{84.14\%} & 6.46\% & 74.73\% & 5.00\% & \textbf{61.18\%} & 5.07\% \\ 
 \hline
-IDC-LSTM-AE & 82.62\% & 1.90\% & 74.48\% & 2.64\% & 62.98\% & 2.99\% & 59.71\% & 1.53\% \\
+IDC-LSTM-AE & \textbf{82.62\%} & 1.90\% & \textbf{74.48\%} & 2.64\% & 62.98\% & 2.99\% & \textbf{59.71\%} & 1.53\% \\
 \hline
 \end{tabular}
-\caption{Mean and Std.Dev of AUC and pAUC for different architectures on 10 indipendent trials (training and testing).}
+\caption{Mean and standard deviation of AUC and pAUC for both architectures on 10 indipendent trials (training and testing). Results that are better than those of non-conditioned models are reported in bold. }
 \label{results}
 \end{table}
 
@@ -201,50 +201,53 @@ CAE \cite{15DeepDenseConvAE} & 72.07\% & 60.96\% & 66.78\% & 52.63\% & 91.77\% &
 LSTM \cite{16LSTMDeepAutoencodersForASDtask} & 73.94\% & 61.01\% & 84.99\% & 67.47\% & 67.82\% & 51.07\% & 67.32\% & 52.05\% \\
 \hline
 \end{tabular}
-\caption{Results reported by the authors of \cite{15DeepDenseConvAE} and \cite{16LSTMDeepAutoencodersForASDtask} regarding the under test machines.}
+\caption{Results reported by the authors of \cite{15DeepDenseConvAE} and \cite{16LSTMDeepAutoencodersForASDtask}.}
 \label{results_papers_comparison}
 \end{table}
 
+Analyzing Table \ref{results} is evident that for slider, valve and fan the IDCCAE model obtains slightly better results than IDC-LSTM-AE, both in terms of AUC and pAUC. Regarding pump, instead IDC-LSTM-AE obtains better results than the convolutional one. Particularly evident is the fact that for pAUC metric, both models for each of the machines outperform the baseline.\\ Obviously the comparison between models with and without conditioning and models is much more interesting. In fact, Table \ref{results} reports in bold results for IDCCAE and IDC-LSTM-AE when they are better than their corresponding versions without conditioning. Remarkable are the improvements obtained with conditional autoencoders in terms of pAUC, especially for pump, slider and valve, for both models.
+
+
 \section{Threshold definition}
-In Chapter 3, an online version of the proposed framework is shown. It allows a real-time audio classification to establish if a machine is working in a normal state or not. From a technical point of view, the online architecture uses the autoencoder, trained with the offline procedures, to reconstruct the spectrograms placed in input. After a reconstruction error evaluation, on the basis of a threshold, the audio is classified. Once obtained reconstruction errors, used as anomaly scores, AUC and pAUC are used to compare different solutions and approaches, but threshold definition step should be done to commission the anomalous sound detector, because without it models can't classify audio inputs. This section tries to explain a possible way to calculate an optimal threshold, but it is not the only one. In fact, a lot of literature and different approaches can be found on threshold calculation optimization process, but this question is beyond the scope of this text. \\
-To calculate an optimal threshold, the concept of optimal must be examined. It depends on the particular use case taken in exam. In fact, once defined a threshold $\epsilon$ and a test set is evaluated, a confusion matrix could be calculated, from which true positive rate (TPR, where positive means anomalous), false positive rate (FPR) and other important measures can be extracted. The threshold goodness is related to the weights and the importance associated to this measures. In anomaly detection task is important to have an high TPR and as low as possible value of FPR. To this purpose, the Youden's index J is defined\cite{13RealTimeDetectionUsingSequentialAutoencoder}:
+In Chapter 3, an online version of the proposed framework is shown. It allows a real-time audio classification to establish if a machine is working in a normal state or not. From a technical point of view, the online architecture uses the autoencoder, trained with offline procedures, to reconstruct the spectrograms placed in input. After a reconstruction error evaluation, on the basis of a threshold, audio clips extracted from the stream are classified. Once obtained reconstruction errors, used as anomaly scores, AUC and pAUC are used to compare different solutions and approaches, but the threshold definition step should be done to commission the anomalous sound detector, because without it models can't classify audio inputs. This section tries to explain a possible way to calculate an optimal threshold, but it is not the only one, since different approaches about threshold definition and its optimization process can be found in literature, but this question is beyond the scope of this text. \\
+To calculate an optimal threshold, the concept of optimal must be examined. It depends on the particular use case taken in exam. In fact, once defined a threshold $\epsilon$ and a test set is evaluated, a confusion matrix could be calculated, from which true positive rate (TPR, where positive means anomalous), false positive rate (FPR) and other important measures can be extracted. The threshold goodness is related to the weights and the importance associated to these measures. In anomaly detection task is important to have an high TPR and as low as possible value of FPR. To this purpose, the Youden's index J is defined \cite{13RealTimeDetectionUsingSequentialAutoencoder}:
 \[ J = Sensitivity + Specificity - 1\]\[ Sensitivity = TPR = \frac{TP}{TP+FN}\]\[ Specificity = TNR = \frac{TN}{TN+FP} = 1-FPR = 1-\frac{FP}{TN+FP}\]\[ J = TPR+(1-FPR)-1 = TPR-FPR \]
-The higher J is, better the threshold is, according to this definition of optimum. To achieve the best, the threshold that corresponds to the max value of J must be found.\\
-Practically, the optimal threshold is calculated using following steps:
+The higher J is, better the threshold is, according to this definition of optimum, and to achieve the best, the threshold that corresponds to the max value of J must be found.\\
+Practically, the optimal threshold has been calculated using following steps:
 \begin{enumerate}
-    \item {Collection of the reconstruction errors calculated from test set samples, which are anomaly scores.}
-    \item {Using scikit-learn function \textit{metrics.roc\_curve} FPR, TPR and Thresholds, also used to visualize ROC curve are calculated. FPR, TPR and Thresholds are three arrays of the same length.}
+    \item {Reconstruction errors calculated from test set samples (anomaly scores) are collected.}
+    \item {Using scikit-learn function \textit{metrics.roc\_curve} FPR, TPR and Thresholds, are calculated and also used to visualize ROC curve. FPR, TPR and Thresholds are three arrays of the same length.}
     \item {The optimal threshold corresponds to the element of Thresholds array at the index on which there is a maximum value of $TPR-FPR$. In other way, a vector of the differences between TPR and FPR can be calculated and then the index of the maximum difference on this vector is the index of the optimal threshold in Threshold array.}
 \end{enumerate}
-Following, Figure \ref{roc_curves} shows the ROC curves calculated for IDCCAE architecture trained on audio clips recorded from pumps. It shows the ROC curves in blue and the bisector lines in red. Dashed lines indicates the values of J. Moreover, red dot is used to mark the FPR and TPR which correspond to the optimal threshold. The value of the latter is also reported.
+Following, Figure \ref{roc_curves} shows the ROC curves calculated for example from IDCCAE architecture trained on audio clips recorded from pumps. It shows the ROC curves in blue and the bisector lines in red, while black dashed lines indicates the values of J. Moreover, red dot is used to mark the FPR and TPR which correspond to optimal thresholds, also numerically reported.\\
+In conclusion, in online detection phases, two alternatives should be taken in consideration:
+\begin{itemize}
+    \item {Calculate and use a different threshold for each ID string (or machine kind), even if the model used for prediction is one;}
+    \item {Calculate and use only one threshold, regardless of the different machine versions (last ROC curve in Figure \ref{roc_curves}).}
+\end{itemize}
+The first option implies that, during detection, the architecture is able to select the right threshold based on the input.\\
 \begin{figure}[ht]
 \centering
 \begin{subfigure}
     \centering
-    \includegraphics[scale=0.47]{TESI DI FIORE/img/roc_id_00.png}
+    \includegraphics[scale=0.40]{TESI DI FIORE/img/roc_id_00.png}
 \end{subfigure}
 \begin{subfigure}
     \centering
-    \includegraphics[scale=0.47]{TESI DI FIORE/img/roc_id_02.png}
+    \includegraphics[scale=0.40]{TESI DI FIORE/img/roc_id_02.png}
 \end{subfigure}
 \begin{subfigure}
     \centering
-    \includegraphics[scale=0.47]{TESI DI FIORE/img/roc_id_04.png}
+    \includegraphics[scale=0.40]{TESI DI FIORE/img/roc_id_04.png}
 \end{subfigure}
 \begin{subfigure}
     \centering
-    \includegraphics[scale=0.47]{TESI DI FIORE/img/roc_id_06.png}
+    \includegraphics[scale=0.40]{TESI DI FIORE/img/roc_id_06.png}
 \end{subfigure}
 \begin{subfigure}
     \centering
-    \includegraphics[scale=0.47]{TESI DI FIORE/img/roc_complessive.png}
+    \includegraphics[scale=0.40]{TESI DI FIORE/img/roc_complessive.png}
 \end{subfigure}
-\caption{ ROC curves obtained using IDCCAE model on pumps test audio clips. The images shown below is the ROC curve calculated using the predictions of all four kinds of pump, with the threshold calculated.}
+\caption{ ROC curves obtained using IDCCAE model on pumps test audio clips. The image shown below is the ROC curve calculated using the predictions of all four kinds of pump, with the threshold calculated.}
 \label{roc_curves}
 \end{figure}
-In online detection phases, two alternatives should be taken in consideration:
-\begin{itemize}
-    \item {Use a different threshold for each ID string (or machine kind), even if the model used for prediction is one;}
-    \item {Use only one threshold, regardless of the different machine kinds (last Figure \ref{roc_curves}).}
-\end{itemize}
-This procedure can also be applied to IDC-LSTM-AE and for all machine types.

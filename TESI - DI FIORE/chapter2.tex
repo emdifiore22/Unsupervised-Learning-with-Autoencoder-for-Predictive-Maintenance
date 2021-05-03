@@ -111,7 +111,7 @@ Joint currents and joints angles of a pick-and-place robot & Sliding Window Conv
 \hline
 Industrial manufacturing processes sound retrieved online & Con-LSTM-AE and Seq-Conv-lAE & \cite{13RealTimeDetectionUsingSequentialAutoencoder} & Capacity to detect temporal dependencies in data. & Longer training time due to the convolutional nature of the network \\ 
 \hline
-\multirow{2}{\linewidth}{\hspace{0pt}Audio data  from Surface Mount Device assembly machine (publicly available on GitHub)} & Conv-AE & \cite{22SMDMachineResidualError} & Capacity to extract features autonomously from audio spectrograms. & Tuning needed to choose the sliding window length and hop-size to extract spectrograms from a audio. \\ 
+\multirow{2}{\linewidth}{\hspace{0pt}Audio data  from Surface Mount Device assembly machine (publicly available on GitHub \footnote{\url{https://github.com/DongYuls/SMD_Anomaly_Detection}} )} & Conv-AE & \cite{22SMDMachineResidualError} & Capacity to extract features autonomously from audio spectrograms. & Tuning needed to choose the sliding window length and hop-size to extract spectrograms from a audio. \\ 
 \cline{2-5}
  & LSTM AE & \cite{23SMDFared} & Capacity to detect temporal dependencies and to allow fast training. & Tuning needed to choose sequence length and hop-size used for anomaly detection. \\ 
 \hline
@@ -119,13 +119,13 @@ Sounds recorded from compressor, engine, compression pump, electric drill and a 
 \hline
 \multirow{5}{\linewidth}{\hspace{0pt}Sounds recorded from industrial machines, like pumps, valves, slide rails and fans (DCASE 2020 Dataset)} & Dense AE & \cite{15DeepDenseConvAE} & Simplicity of the overall architectures. & Necessity to tune parameters regarding audio clips transformation process into spectrograms. \\ 
 \cline{2-5}
- & Conv-AE & \cite{15DeepDenseConvAE} & Capacity to capture temporale dependencies using audio spectrograms as inputs. & Longer training time regarding the convolutional version. \\ 
+ & Conv-AE & \cite{15DeepDenseConvAE} & Capacity to capture temporal dependencies using audio spectrograms as inputs. & Longer training time regarding the convolutional version. \\ 
 \cline{2-5}
  & LSTM AE & \cite{16LSTMDeepAutoencodersForASDtask} & Capacity to capture temporal dependencies on audio spectrograms segments. & Tuning needed to choose the number of timesteps and the number of features. \\ 
 \cline{2-5}
  & Transformer and Conformer based AEs & \cite{17ConformerBasedIDAWAREAutoencoder} & Attention resolves the inability of seq2seq architectures to retain longer sequences, focusing on valuable part of the sequence. & Architecture complexity in terms of parameters due to the presence of attention layers. \\ 
 \cline{2-5}
- & Conditional Dense AE, Conditional Conv-AE and Conditional LSTM AE & \cite{17ConformerBasedIDAWAREAutoencoder},\cite{18IDConditionedAutoEncoder},\cite{19DescriptionDiscussionDCASE2020} & Conditioning autoencoders can recognize audio samples recorded from different machines of the same type using external information, like identifiers. & Necessity to add external layers to process these identifiers, which should also be transformed in a compatible format. A new training loss must be defined to use the identifier information \\
+ & Conditional Dense AE, Conditional Conv-AE and Conditional LSTM AE & \cite{17ConformerBasedIDAWAREAutoencoder},\cite{18IDConditionedAutoEncoder},\cite{19DescriptionDiscussionDCASE2020} & Conditioning autoencoders can recognize audio samples recorded from different machines of the same type using external information, like identifiers. & Necessity to add external layers to process these identifiers, which should also be transformed in a compatible format. A new training loss must be defined to use the identifier information. \\
 \hline
 \end{tabular}
 }
