@@ -94,7 +94,7 @@ Because is quite simple to collect large dataset associated to a particular mach
 \label{scoring_system_approach}
 \end{figure}
 
-Anomalies in sensor data can be defined as previously unseen patterns and the algorithm for anomaly detection should be able to detect known anomalies as well as generalize to new and unknown ones. In general, a common approach to achieve this detection is a sliding-window (Figure \ref{anomaly_detection_with_sliding_window}). Since medels are trained on normal data which is a fixed-length sequence of preceding steps, it can achieve anomaly detection by comparing the predicted value at each timestep with the actual sequence, allowing also to perform a real-time detection and eventually alerts generation \cite{9UnsupervisedOnlineAnomalyDetectionMultivariate} and, moreover, using the temporal relationships present in sequences.
+Anomalies in sensor data can be defined as previously unseen patterns and the algorithm for anomaly detection should be able to detect known anomalies as well as generalize to new and unknown ones. In general, a common approach to achieve this detection is a sliding-window (Figure \ref{anomaly_detection_with_sliding_window}). Since models are trained on normal data which is a fixed-length sequence of preceding steps, it can achieve anomaly detection by comparing the predicted value at each timestep with the actual sequence, allowing also to perform a real-time detection and eventually alerts generation \cite{9UnsupervisedOnlineAnomalyDetectionMultivariate} and, moreover, using the temporal relationships present in sequences.
 \begin{figure}[ht]
 \includegraphics[scale=0.8]{TESI DI FIORE/img/OnlineAnomalyDetection.png}
 \centering
